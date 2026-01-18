@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aura Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .quiz-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .options button {
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #e3e7eb;
+        }
+
+        .options button:hover {
+            background: #cfd6dd;
+        }
+
+        .result {
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1 id="header">Aura Test</h1>
+
+    <div id="quiz">
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+    </div>
+
+    <div id="result" class="result hidden">
+        <h2 id="personality"></h2>
+        <img id="resultImage" src="images/sub.png" alt="Missingno" style="max-height:100%; max-width:100%; margin: 15px 0; border-radius: 10px;">
+        <p id="description">This is a substitute for your Pokemon</p>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "There is a limited time pop-up store for a series you like! What do you buy?",
+            options: [
+                { text: "A super soft plushie", type: ["cute", "cute"]},
+                { text: "A highly detailed figure", type: ["cool", "cool"] },
+                { text: "A full art print", type: ["cool", "cool"] },
+                { text: "A couple character pins", type: ["cute", "cute"] }
+            ]
+        },
+        {
+            question: "Your friend wants a new plant for their garden. What do you get them?",
+            options: [
+                { text: "Some beautiful flowers", type: ["cute"]},
+                { text: "A cactus", type: ["cool"] },
+                { text: "A young tree", type: ["cool"] },
+                { text: "A berry bush", type: ["cute"] }
+            ]
+        },
+        {
+            question: "It's movie night! What do you put on?",
+            options: [
+                { text: "A cute romcom", type: ["physical", "supernatural"]},
+                { text: "Something scary and exciting", type: ["supernatural", "supernatural"]},
+                { text: "A fast paced movie with lots of action", type: ["physical", "physical"] },
+                { text: "A story that immerses you in another world", type: ["elemental", "elemental"] }
+            ]
+        },
+        {
+            question: "You see strange lights in the sky. What could it be?",
+            options: [
+                { text: "Aliens", type: ["supernatural", "supernatural"]},
+                { text: "Fireworks", type: ["elemental", "elemental"]},
+                { text: "Probably an airplane", type: ["physical", "physical"] },
+                { text: "Aurora Borealis", type: ["elemental", "elemental"] }
+            ]
+        },
+        {
+            question: "What are you doing for dinner?",
+            options: [
+                { text: "Cooking something", type: ["elemental", "elemental"]},
+                { text: "Getting fast food", type: ["physical", "physical"]},
+                { text: "Heating up some frozen food", type: ["elemental", "supernatural"] },
+                { text: "Ordering delivery", type: ["physical", "supernatural"] }
+            ]
+        },
+        {
+            question: "Where does a dragon's power come from?",
+            options: [
+                { text: "Their magical breath", type: ["cast", "cast"]},
+                { text: "Their impenetrable scales", type: ["tank", "tank"]},
+                { text: "Their incredible lifespan", type: ["cast", "tank"] },
+                { text: "Their powerful wings", type: ["rush", "rush"] }
+            ]
+        },
+        {
+            question: "Which RPG class is your favorite?",
+            options: [
+                { text: "Rogue", type: ["rush", "rush"]},
+                { text: "Fighter", type: ["tank", "rush"]},
+                { text: "Cleric", type: ["tank", "cast"] },
+                { text: "Wizard", type: ["cast", "cast"] }
+            ]
+        },
+        {
+            question: "What is the most important part of a tree?",
+            options: [
+                { text: "The root", type: ["rush", "tank"]},
+                { text: "The trunk", type: ["tank", "tank"]},
+                { text: "The leaves", type: ["rush", "cast"] },
+                { text: "The branches", type: ["rush", "rush"] }
+            ]
+        },
+        {
+            question: "You're stuck at a party for at least an hour. What do you do?",
+            options: [
+                { text: "Hide in corner", type: ["in"] },
+                { text: "Stick with your friend", type: ["in"] },
+                { text: "Make some new friends", type: ["ex"] },
+                { text: "Get wasted", type: ["ex"] }
+            ]
+        },
+        {
+            question: "What's for dessert?",
+            options: [
+                { text: "Fresh fruit", type: ["cold"]},
+                { text: "Vanilla ice cream", type: ["cold"]},
+                { text: "Chocolate Lava cake", type: ["hot"] },
+                { text: "Warm apple pie", type: ["hot"] }
+            ]
+        },
+    ];
+
+    const scores = {
+        elemental: 0,
+        physical: 0,  
+        supernatural: 0,
+
+        rush: 0,
+        tank: 0,
+        cast: 0,
+
+        cute: 0,
+        cool: 0,
+
+        in: 0,
+        ex: 0,
+
+        cold: 0,
+        hot: 0
+    };
+
+    const mons = {
+        Pikachu: ["elemental", "rush", "cute", "ex", "hot"],
+        Squirtle: ["elemental", "tank", "cute", "in", "cold"],
+        Bulbasaur: ["elemental", "cast", "cute", "in", "cold"],
+        Charmander: ["elemental", "cast", "cool", "ex", "hot"],
+        Treecko: ["elemental", "rush", "cool", "ex", "cold"],
+        Froakie: ["elemental", "rush", "cool", "in", "cold"],
+        Growlithe: ["elemental", "rush", "cool", "ex", "hot"],
+        Torchic: ["elemental", "rush", "cool", "ex", "hot"],
+        Shinx: ["elemental", "rush", "cool", "in", "hot"],
+        Sprigatito: ["elemental", "rush", "cute", "in", "cold"],
+        Turtwig: ["elemental", "tank", "cute", "in", "hot"],
+        Mudkip: ["elemental", "tank", "cute", "ex", "hot"],
+        Piplup: ["elemental", "tank", "cute", "ex", "cold"],
+        Litten: ["elemental", "tank", "cool", "in", "cold"],
+        Marill: ["elemental", "cast", "cute", "ex", "cold"],
+        Fennekin: ["elemental", "cast", "cute", "ex", "hot"],
+        Mareep: ["elemental", "cast", "cute", "in", "hot"],
+        
+        Abra: ["supernatural", "rush", "cool", "in", "hot"],
+        Gible: ["supernatural", "rush", "cool", "in", "cold"],
+        Ghastly: ["supernatural", "rush", "cool", "ex", "cold"],
+        Misdreavus: ["supernatural", "rush", "cute", "ex", "cold"],
+        Dratini: ["supernatural", "tank", "cool", "ex", "cold"],
+        Togepi: ["supernatural", "tank", "cute", "in", "cold"],
+        Clefairy: ["supernatural", "cast", "cute", "ex", "cold"],
+        Ralts: ["supernatural", "cast", "cute", "in", "cold"],
+
+        Rockruff: ["physical", "rush", "cool", "ex", "cold"],
+        Machop: ["physical", "rush", "cool", "in", "cold"],
+        Buneary: ["physical", "rush", "cute", "ex", "hot"],
+        Aron: ["physical", "tank", "cool", "ex", "cold"],
+        Larvitar: ["physical", "tank", "cool", "in", "hot"],
+        Tinkatink: ["physical", "tank", "cute", "ex", "cold"],
+        Riolu: ["physical", "cast", "cool", "in", "cold"],
+        Eevee: ["physical", "cast", "cute", "ex", "hot"]
+    };
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    shuffle(questions);
+    questions.forEach(q => shuffle(q.options));
+    let currentQuestion = 0;
+
+    function loadQuestion() {
+        document.getElementById("header").textContent = `Question ${currentQuestion + 1}`;
+        document.getElementById("question").textContent = questions[currentQuestion].question;
+        
+        const optionsEl = document.getElementById("options");
+        optionsEl.innerHTML = "";
+        questions[currentQuestion].options.forEach(option => {
+            const button = document.createElement("button");
+            button.textContent = option.text;
+            button.onclick = () => selectAnswer(option.type);
+            optionsEl.appendChild(button);
+        });
+    }
+
+    function selectAnswer(type) {
+        for (let t in type) {
+            scores[type[t]]++;
+        }
+
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById("header").textContent = "Result";
+        document.getElementById("quiz").classList.add("hidden");
+        document.getElementById("result").classList.remove("hidden");
+        
+        let genre = { supernatural: scores["supernatural"], physical: scores["physical"], elemental: scores["elemental"]};
+        genre = Object.keys(genre).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        console.log(genre);
+        
+        let role = { cast: scores["cast"], tank: scores["tank"], rush: scores["rush"]};
+        role = Object.keys(role).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        console.log(role);
+
+        let appeal = { cute: scores["cute"], cool: scores["cool"]};
+        appeal = Object.keys(appeal).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        console.log(appeal);
+
+        let social = { in: scores["in"], ex: scores["ex"]};
+        social = Object.keys(social).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        console.log(social);
+
+        let heat = { cold: scores["cold"], hot: scores["hot"]};
+        heat = Object.keys(heat).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        console.log(heat);
+
+        let finalMon = Object.keys(mons).filter((mon) => mons[mon].includes(genre) && mons[mon].includes(role) && mons[mon].includes(appeal));
+        console.log(finalMon);
+        if (finalMon.length > 1) finalMon = finalMon.filter((mon) => mons[mon].includes(social));
+        console.log(finalMon);
+        if (finalMon.length > 1) finalMon = finalMon.filter((mon) => mons[mon].includes(heat));
+        console.log(finalMon);
+
+        document.getElementById("personality").textContent = `You are ${finalMon}!`;
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
