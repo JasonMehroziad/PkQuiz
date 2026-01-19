@@ -6,7 +6,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f6f8;
+            background-image: url("images/Background.jpg");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -14,7 +17,7 @@
         }
 
         .quiz-container {
-            background: white;
+            background: rgb(40, 116, 179);
             padding: 25px;
             border-radius: 10px;
             width: 400px;
@@ -221,6 +224,44 @@
         Eevee: ["physical", "cast", "cute", "ex", "hot"]
     };
 
+    const desc = {
+        Pikachu: "You're everyone's favorite electric mouse! You're quick on your feet and respond to any threat with an electrifying shock.",
+        Squirtle: "You know a strong defense can be greater than strength alone. You block attacks with your tough shell and douse flames with a spray of water.",
+        Bulbasaur: "You understand nurture is the key to growth. You disable enemies with various powders from the bulb on your back and sap their health to heal yourself.",
+        Charmander: "You're not one to turn down a challenge. You're eager to show your strength and you resolve most problems with a jet of hot fire.",
+        Treecko: "You are a swift guardian. You cut down any threat with your leaf blades before it can act.",
+        Froakie: "You plan your actions carefully, observing thoroughly before making a decisive move.",
+        Growlithe: "You are eternally loyal to your friends and a powerful threat to your foes. You put yourself in front of danger and fight it with fierce bites and flames.",
+        Torchic: "You are usually docile and friendly, but unstoppably fierce if provoked. When it happens, you teach them a lesson with a flurry of pecks and kicks.",
+        Shinx: "You are often underestimated because of your cute exterior. Those who make the mistake of bothering your recieve a quick bite and zap.",
+        Sprigatito: "You often distract others to keep them out of your way. A sweet scent is often a perfect bribe.",
+        Turtwig: "You move slowly and do not rush what's important to you. Slow and steady wins the race.",
+        Mudkip: "You can often be found where others won't go, places that are considered wet and murky. However, your strangeness is really your greatest strength.",
+        Piplup: "You're so cute that everyone wants to help you, but you would rather accomplish things yourself. Despite your appearance, you are incredibly resiliant.",
+        Litten: "You don't mind playing the villain if it makes others get along. Sometimes you have to be rude to solve a problem.",
+        Marill: "You float freely across what most people consider 'problems'. You're not lazy though, you just don't see the point in stressing over something you will fix.",
+        Fennekin: "You seek to know what is unseen. Potential is best kindled with knowledge.",
+        Mareep: "Your passive energy is valuable to everyone around you. You power up others and help finish what they start.",
+        
+        Abra: "You are too busy training your mind to be bothered with trivial issues. Anything serious can be resolved with a telekinetic blast",
+        Gible: "You dwell far from the sun, deep within a cave. You feast on anything that wanders too close to your massive jaws.",
+        Ghastly: "You stalk your targets, carefully planning when to inflict pure terror. After all, life's no fun without a good scare.",
+        Misdreavus: "You're always thinking about your next prank. The look on your victim's face gives you immense joy.",
+        Dratini: "You're so elusive, sometimes people forget you're even their. You don't mind though, you're always there when you're needed.",
+        Togepi: "Everyone sees you as a baby, but you really just dislike conflict. You do your best to help everyone get along.",
+        Clefairy: "You've got your head in the clouds, or... the moon? No one really gets what you're all about but love how friendly you are.",
+        Ralts: "You sense the emotions of others but are extremely shy. You take your time building up the courage to help others with your talent.",
+
+        Rockruff: "You're super playful but your rough exterior makes it hard for some people to get too close. You're incredibly loyal to those who don't mind.",
+        Machop: "You spend countless hours honing your body. Martial perfection suceeds all all other pursuits.",
+        Buneary: "You're very fluffy but also super observant of your surroundings. You can get along with most, but a swift kick fixes any problems you notice.",
+        Aron: "You're basically indestructible... on the outside. You hope no one will make fun of you, because that's one of the few things steel can't block.",
+        Larvitar: "Yeah you eat dirt, live in dirt, and are probably made of dirt, but you're so powerful that it doesn't seem like a bad thing at all.",
+        Tinkatink: "You work tirelessly on your masterpiece. You'll have the admiration of everyone once it's finished.",
+        Riolu: "You train relentlessly to master your understanding of emotions. You can only understand who is righteous if you know their motives.",
+        Eevee: "You aren't really sure what you want to be yet, but that's ok! You know you can only make the right choice by being true to yourself."
+    };
+
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -266,32 +307,26 @@
         
         let genre = { supernatural: scores["supernatural"], physical: scores["physical"], elemental: scores["elemental"]};
         genre = Object.keys(genre).reduce((a, b) => scores[a] > scores[b] ? a : b);
-        console.log(genre);
         
         let role = { cast: scores["cast"], tank: scores["tank"], rush: scores["rush"]};
         role = Object.keys(role).reduce((a, b) => scores[a] > scores[b] ? a : b);
-        console.log(role);
 
         let appeal = { cute: scores["cute"], cool: scores["cool"]};
         appeal = Object.keys(appeal).reduce((a, b) => scores[a] > scores[b] ? a : b);
-        console.log(appeal);
 
         let social = { in: scores["in"], ex: scores["ex"]};
         social = Object.keys(social).reduce((a, b) => scores[a] > scores[b] ? a : b);
-        console.log(social);
 
         let heat = { cold: scores["cold"], hot: scores["hot"]};
         heat = Object.keys(heat).reduce((a, b) => scores[a] > scores[b] ? a : b);
-        console.log(heat);
 
         let finalMon = Object.keys(mons).filter((mon) => mons[mon].includes(genre) && mons[mon].includes(role) && mons[mon].includes(appeal));
-        console.log(finalMon);
         if (finalMon.length > 1) finalMon = finalMon.filter((mon) => mons[mon].includes(social));
-        console.log(finalMon);
         if (finalMon.length > 1) finalMon = finalMon.filter((mon) => mons[mon].includes(heat));
-        console.log(finalMon);
 
         document.getElementById("personality").textContent = `You are ${finalMon}!`;
+        document.getElementById("resultImage").src = `images/${finalMon}.png`;
+        document.getElementById("description").textContent = desc[finalMon];
     }
 
     loadQuestion();
