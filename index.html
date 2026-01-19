@@ -16,14 +16,6 @@
             height: 100vh;
         }
 
-        .quiz-container {
-            background: rgb(40, 116, 179);
-            padding: 25px;
-            border-radius: 10px;
-            width: 400px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
         h1 {
             text-align: center;
         }
@@ -58,7 +50,7 @@
 </head>
 <body>
 
-<div class="quiz-container">
+<div id="quiz-container" style="background: rgb(40, 116, 179); padding: 25px; border-radius: 10px; width: 400px;">
     <h1 id="header">Aura Test</h1>
 
     <div id="quiz">
@@ -302,6 +294,44 @@
         Eevee: []
     };
 
+    const color = {
+        Pikachu: [200, 200, 0],
+        Squirtle: [255, 155, 0],
+        Bulbasaur: [0, 155, 0],
+        Charmander: [200, 0, 0],
+        Treecko: [0, 155, 0],
+        Froakie: [255, 155, 0],
+        Growlithe: [200, 0, 0],
+        Torchic: [200, 0, 0],
+        Shinx: [200, 200, 0],
+        Sprigatito: [0, 155, 0],
+        Turtwig: [0, 155, 0],
+        Mudkip: [255, 155, 0],
+        Piplup: [255, 155, 0],
+        Litten: [200, 0, 0],
+        Marill: [255, 155, 0],
+        Fennekin: [200, 0, 0],
+        Mareep: [200, 200, 0],
+        
+        Abra: [155, 55, 255],
+        Gible: [55, 55, 255],
+        Ghastly: [0, 0, 155],
+        Misdreavus: [0, 0, 155],
+        Dratini: [55, 55, 255],
+        Togepi: [255, 0, 255],
+        Clefairy: [255, 0, 255],
+        Ralts: [200, 0, 200],
+
+        Rockruff: [100, 50, 0],
+        Machop: [155, 0, 0],
+        Buneary: [200, 200, 200],
+        Aron: [125, 125, 125],
+        Larvitar: [100, 50, 0],
+        Tinkatink: [200, 0, 100],
+        Riolu: [155, 0, 0],
+        Eevee: [200, 200, 200]
+    };
+
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -368,6 +398,7 @@
         document.getElementById("personality").textContent = `You are ${finalMon}!`;
         document.getElementById("resultImage").src = `images/${finalMon}.png`;
         document.getElementById("description").textContent = desc[finalMon];
+        document.getElementById("quiz-container").style.backgroundColor = `rgb(${color[finalMon][0]}, ${color[finalMon][1]}, ${color[finalMon][2]})`;
 
         let alternates =  "";
         if (alts[finalMon].length > 0) alternates += "<h3>Other options:</h3>";
