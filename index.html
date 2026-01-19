@@ -69,8 +69,10 @@
     <div id="result" class="result hidden">
         <h2 id="personality"></h2>
         <img id="resultImage" src="images/sub.png" alt="Missingno" style="max-height:100%; max-width:100%; margin: 15px 0; border-radius: 10px;">
-        <p id="description">This is a substitute for your Pokemon</p>
+        <p id="description" style="font-weight: bold;">This is a substitute for your Pokemon</p>
     </div>
+
+    <div id="alternates" class="hidden" style="display: flex; justify-content: space-between;"></div>
 </div>
 
 <script>
@@ -231,7 +233,7 @@
         Charmander: "You're not one to turn down a challenge. You're eager to show your strength and you resolve most problems with a jet of hot fire.",
         Treecko: "You are a swift guardian. You cut down any threat with your leaf blades before it can act.",
         Froakie: "You plan your actions carefully, observing thoroughly before making a decisive move.",
-        Growlithe: "You are eternally loyal to your friends and a powerful threat to your foes. You put yourself in front of danger and fight it with fierce bites and flames.",
+        Growlithe: "You are eternally loyal to your friends and a powerful threat to your foes. You put yourself in front of danger and fight back with fierce attacks.",
         Torchic: "You are usually docile and friendly, but unstoppably fierce if provoked. When it happens, you teach them a lesson with a flurry of pecks and kicks.",
         Shinx: "You are often underestimated because of your cute exterior. Those who make the mistake of bothering your recieve a quick bite and zap.",
         Sprigatito: "You often distract others to keep them out of your way. A sweet scent is often a perfect bribe.",
@@ -260,6 +262,44 @@
         Tinkatink: "You work tirelessly on your masterpiece. You'll have the admiration of everyone once it's finished.",
         Riolu: "You train relentlessly to master your understanding of emotions. You can only understand who is righteous if you know their motives.",
         Eevee: "You aren't really sure what you want to be yet, but that's ok! You know you can only make the right choice by being true to yourself."
+    };
+
+    const alts = {
+        Pikachu: ["Pachirisu", "Dedenne", "Togedemaru", "Morpeko"],
+        Squirtle: ["Totodile"],
+        Bulbasaur: ["Chikorita", "Oddish"],
+        Charmander: ["Cyndaquil"],
+        Treecko: ["Snivy"],
+        Froakie: ["Poliwag"],
+        Growlithe: ["Ponyta", "Scorbunny"],
+        Torchic: ["Chimchar", "Tepig"],
+        Shinx: ["Electrike"],
+        Sprigatito: [],
+        Turtwig: ["Chespin", "Grooky"],
+        Mudkip: ["Wooper", "Shellos"],
+        Piplup: [],
+        Litten: [],
+        Marill: ["Popplio", "Azurill"],
+        Fennekin: ["Vulpix"],
+        Mareep: [],
+        
+        Abra: [],
+        Gible: ["Trapinch"],
+        Ghastly: [],
+        Misdreavus: ["Shuppet"],
+        Dratini: ["Goomy"],
+        Togepi: [],
+        Clefairy: ["Cleffa", "Jigglypuff", "Igglybuff"],
+        Ralts: ["Hatenna", "Gothita"],
+
+        Rockruff: ["Geodude", "Roggenrola", "Nacli"],
+        Machop: [],
+        Buneary: ["Teddiursa", "Skitty", "Minccino"],
+        Aron: [],
+        Larvitar: [],
+        Tinkatink: ["Mawile"],
+        Riolu: [],
+        Eevee: []
     };
 
     function shuffle(array) {
@@ -304,6 +344,7 @@
         document.getElementById("header").textContent = "Result";
         document.getElementById("quiz").classList.add("hidden");
         document.getElementById("result").classList.remove("hidden");
+        document.getElementById("alternates").classList.remove("hidden");
         
         let genre = { supernatural: scores["supernatural"], physical: scores["physical"], elemental: scores["elemental"]};
         genre = Object.keys(genre).reduce((a, b) => scores[a] > scores[b] ? a : b);
@@ -327,6 +368,13 @@
         document.getElementById("personality").textContent = `You are ${finalMon}!`;
         document.getElementById("resultImage").src = `images/${finalMon}.png`;
         document.getElementById("description").textContent = desc[finalMon];
+
+        let alternates =  "";
+        if (alts[finalMon].length > 0) alternates += "<h3>Other options:</h3>";
+        for (let alt in alts[finalMon]) {
+            alternates += `<img src="images/${alts[finalMon][alt]}.png" alt="Missingno" style="max-height:100px; max-width:100px;"> `;
+        }
+        document.getElementById("alternates").innerHTML = alternates;
     }
 
     loadQuestion();
